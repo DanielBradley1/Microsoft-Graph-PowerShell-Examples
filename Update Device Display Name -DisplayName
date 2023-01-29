@@ -1,0 +1,6 @@
+Import-Module Microsoft.Graph.Identity.DirectoryManagement
+Connect-MgGraph Device.ReadWrite.All
+
+$device = Get-MgDevice -Search "displayName:TargetDevice" ` -ConsistencyLevel eventual
+
+Update-MgDevice -DeviceId $device.Id -DisplayName "MyNewDisplayName"
