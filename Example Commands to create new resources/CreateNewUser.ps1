@@ -20,6 +20,6 @@ $PasswordProfile = @{
 }
 
 ##Create the new user account
-New-MgUser -DisplayName "New User" -PasswordProfile $PassProfile `
+New-MgUser -DisplayName "New User" -PasswordProfile $PasswordProfile `
 -AccountEnabled -MailNickName "NewUser" `
 -UserPrincipalName "newuser@ourcloudnetwork.com"
