@@ -49,8 +49,6 @@ else {
 
 Write-Host "Looking for $DeviceName"
 
-#Define your device name here
-#$DeviceName = "Win11Desktop02"
 #Store the device id value for your target device
 $DeviceId = (Get-MgDevice | Where-Object {$_.DisplayName -eq $DeviceName} | Select DeviceId).DeviceId
 
