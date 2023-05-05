@@ -20,9 +20,7 @@ param
 
 Write-Host "Checking for Microsoft Graph Modules" -ForegroundColor Cyan
 #Install MS Graph if not available
-if (Get-Module -ListAvailable -Name Microsoft.Graph.Authentication) {
-    Write-Host "OK" -ForegroundColor Green
-} 
+if (Get-Module -ListAvailable -Name Microsoft.Graph.Authentication) {} 
 else {
     Write-Host "Installing Microsoft Graph"
     Install-Module -Name Microsoft.Graph -Scope CurrentUser -Repository PSGallery -Force
@@ -32,7 +30,6 @@ else {
 #Connect to Microsoft Graph
 Write-host "Connecting to Microsoft Graph" -ForegroundColor Cyan
 Connect-Mggraph -Scope DeviceLocalCredential.Read.All, Device.Read.All
-Write-host "Connected"
 
 Write-host "Checking Session" -ForegroundColor Yellow
 if ((Get-MgContext).Scopes -match "Device") {}
@@ -41,7 +38,6 @@ else {
     Write-Host "Session not established, retrying authentication..." -ForegroundColor Yellow
     Connect-Mggraph -Scope DeviceLocalCredential.Read.All, Device.Read.All
     $var++
-    Write-host "$var"
     } Until ((Get-MgContext).Scopes -ne $null -or $var -eq 3)
 	If ((Get-MgContext).Scopes -match "Device") {
 		Write-host "Connection successful" -foregroundcolor Green
@@ -84,4 +80,4 @@ $passwordb64 = ($Response.credentials).PasswordBase64
 $password = $passwordb64 | %{[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($_))}
 Write-host "$Password"
 
-Disconnect-MgGraph
+Disconnect-MgGraph | out-null
