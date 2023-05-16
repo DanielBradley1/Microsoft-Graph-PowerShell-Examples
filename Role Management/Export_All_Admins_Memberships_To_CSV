@@ -1,0 +1,47 @@
+<#
+AUTHOR: Daniel Bradley
+LINKEDIN: https://www.linkedin.com/in/danielbradley2/
+TWITTER: https://twitter.com/DanielatOCN
+WEBSITE: https://ourcloudnetwork.com/
+Info: This script was written by Daniel Bradley for the ourcloudnetwork.com blog
+#>
+
+#Connect to Microsoft Graph
+Connect-MgGraph -Scopes RoleManagement.Read.Directory, User.Read.All, AuditLog.Read.All
+Select-MgProfile -Name Beta
+
+#Get all directory roles
+$allroles = Get-MgDirectoryRole
+
+#Provision in new array object
+$Report = [System.Collections.Generic.List[Object]]::new()
+
+#Start a loop to build the report
+Foreach ($role in $allroles){
+    $rolemembers = $null
+    #Get members of each role
+    $Rolemembers = Get-MgDirectoryRoleMember -DirectoryRoleId $Role.id
+    #Skip role if role assignments are empty
+    If ($Rolemembers -eq $null) {Write-host "No users assigned to $($Role.DisplayName)"} Else {
+        Foreach ($Member in $rolemembers){
+        #Filter out non-user assignments
+            If ($member.AdditionalProperties.'@odata.type' -notmatch "servicePrincipal") {
+                $SignInActivity = $null
+                #Get signin logs for user
+                $SignInActivity = Get-MgUser -UserId $member.id -Property signinactivity | Select-Object -ExpandProperty signinactivity
+                #Build current array object
+                $obj = [pscustomobject][ordered]@{
+                    Role                     = $Role.DisplayName
+                    User                     = $member.AdditionalProperties.displayName
+                    Username                 = $member.AdditionalProperties.userPrincipalName
+                    LastInteractiveSignIn    = $SignInActivity.LastSignInDateTime
+                }
+                #Add current array object to the report
+                $report.Add($obj)
+            }
+        }
+    }
+}
+
+#Export report to csv
+$report | Export-CSV -path C:\temp\AdminRoleReport.csv -NoTypeInformation
