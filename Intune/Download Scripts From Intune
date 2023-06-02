@@ -1,0 +1,36 @@
+#Define output path
+$path = "C:\temp\"
+
+#Connect to Microsoft Graph
+Connect-MgGraph
+
+#Provision array
+$Report = [System.Collections.Generic.List[Object]]::new()
+
+#Define URI for all scripts
+$uri = "https://graph.microsoft.com/beta/deviceManagement/deviceManagementScripts"
+
+#Get all scripts
+$scripts = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/beta/deviceManagement/deviceManagementScripts" -OutputType PSObject | select -expand value | select displayname, fileName, id
+
+#Loop through each script
+foreach ($Script in $scripts) {
+    $sc = $null
+#   Define the current script URI
+    $uri2 = "https://graph.microsoft.com/beta/deviceManagement/deviceManagementScripts/$($script.id)"
+#   Get the current script
+    $sc = Invoke-MgGraphRequest -Uri $uri2 -Method GET
+#   Decode script and output to C:\temp\%scriptname%.ps1
+    [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($($sc.scriptContent))) | Out-File -FilePath $(Join-Path $path $($sc.fileName)) -Encoding ASCII
+#   Build array object for report
+    $obj = [PSCustomObject][ordered]@{
+        "Display Name" = $sc.displayname
+        "File Name"    = $sc.filename
+        "Output Path"  = "$path$($sc.filename)"
+    }
+#   Add object to report
+    $report.Add($obj)
+}
+
+#Display report in console
+$report
