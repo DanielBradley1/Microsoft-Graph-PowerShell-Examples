@@ -1,0 +1,11 @@
+$uri = "https://graph.microsoft.com/beta/organization/4e67cd72-f73a-42aa-a841-b8dd6ec328ca"
+$body = @'
+{
+"OnPremisesSyncEnabled": false
+}
+'@
+Invoke-MgGraphRequest -uri $uri -Body $body -Method PATCH
+
+OR
+
+Update-MgOrganization -OrganizationId 4e67cd72-f73a-42aa-a841-b8dd6ec328ca -OnPremisesSyncEnabled false
