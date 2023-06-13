@@ -1,0 +1,28 @@
+Connect-MgGraph -scopes UserAuthenticationMethod.ReadWrite.All, User.Read.All
+
+$allusers = Get-MgUser -all
+
+$body = @'
+{
+  "userPreferredMethodForSecondaryAuthentication": "oath"
+}
+'@
+
+$method = "#microsoft.graph.phoneAuthenticationMethod"
+
+Foreach ($user in $allusers) {
+    $uri = "https://graph.microsoft.com/beta/users/$($user.id)/authentication/signInPreferences"
+    If ((Get-MgUserAuthenticationMethod -UserId $user.id).AdditionalProperties.values -match $method){
+        try {
+            Invoke-MgGraphRequest -uri $uri -Body $body -Method PATCH -ErrorAction Stop
+        }
+        Catch {
+            Write-Host "Unable to update user authentication method for $($user.DisplayName)"
+        }
+       
+    } Else {Write-Host "`n Method has not been registered by $($user.UserPrincipalName)"-ForegroundColor Yellow}
+}
+
+
+
+Possible values are push, oath, voiceMobile, voiceAlternateMobile, voiceOffice, sms, and unknownFutureValue
