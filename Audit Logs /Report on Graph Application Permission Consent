@@ -33,7 +33,8 @@ ForEach ($log in $logs) {
     # build report object
     $obj = [PSCustomObject][ordered]@{
         "App Name"      = $app.DisplayName
-        "Admin Consent" = (($t.targetResources.modifiedProperties) | Where-Object {$_.DisplayName -eq 'ConsentContext.IsAdminConsent'}).NewValue
+        "Admin Consent" = (($log.targetResources.modifiedProperties) | Where-Object {$_.DisplayName -eq 'ConsentContext.IsAdminConsent'}).NewValue
+        "Consented by"  = $log.initiatedBy.user.userPrincipalName
     }
     $report.Add($obj)
  }
