@@ -16,14 +16,14 @@ Info: This script was written by Daniel Bradley for the ourcloudnetwork.com blog
 param
 (
     [string]$DeviceName
-    )
+)
 
 Write-Host "Checking for Microsoft Graph Modules" -ForegroundColor Cyan
-#Install MS Graph if not available
+#Install Graph SDK if not available
 if (Get-Module -ListAvailable -Name Microsoft.Graph.Authentication) {} 
 else {
     Write-Host "Installing Microsoft Graph"
-    Install-Module -Name Microsoft.Graph -Scope CurrentUser -Repository PSGallery -Force
+    Install-Module -Name Microsoft.Graph.Authentication -Scope CurrentUser -Repository PSGallery -Force
     Write-Host "Microsoft Graph Authentication Installed"
 }
 
