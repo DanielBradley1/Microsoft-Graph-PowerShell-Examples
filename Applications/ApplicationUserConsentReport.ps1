@@ -1,6 +1,6 @@
 ## Written by Daniel Bradley
 ## Connect with me on LinkedIn: https://www.linkedin.com/in/danielbradley2/
-## Posted at https://ourcloudnetwork.com/
+## Posted at https://ourcloudnetwork.com/ 
 
 #Connect to graph
 Connect-MgGraph -Scopes Application.Read.All, user.read.all
