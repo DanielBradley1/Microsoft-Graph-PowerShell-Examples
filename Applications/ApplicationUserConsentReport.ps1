@@ -1,6 +1,34 @@
-## Written by Daniel Bradley
-## Connect with me on LinkedIn: https://www.linkedin.com/in/danielbradley2/
-## Posted at https://ourcloudnetwork.com/ 
+<#
+.SYNOPSIS
+Generates a report of user-consented permissions to application in Microsoft Entra
+.LINK
+   https://ourcloudnetwork.com
+   https://www.linkedin.com/in/danielbradley2/
+.NOTES
+   Version:        0.1
+   Author:         Daniel Bradley
+   Creation Date:  Monday, January 8th 2024, 6:54:33 am
+   File: ApplicationUserConsentReport.ps1
+   Copyright (c) 2024 Your Company
+
+HISTORY:
+2024-01-08	File Generated
+
+.INPUTS
+.OUTPUTS
+
+.COMPONENT
+ Required Modules: 
+ Microsoft.Graph.Applications
+ Microsoft.Graph.Users
+ 
+.EXAMPLE
+.\ApplicationUserConsentReport.ps1
+
+.LICENSE
+Use this code free of charge at your own risk.
+Never deploy code into production if you do not know what it does.
+#>
 
 #Connect to graph
 Connect-MgGraph -Scopes Application.Read.All, user.read.all
