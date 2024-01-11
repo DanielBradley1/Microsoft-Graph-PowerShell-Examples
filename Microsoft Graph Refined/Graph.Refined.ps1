@@ -28,4 +28,3 @@ function Refine {
         [PSCustomObject]$NewObj
     } 
 }
-
