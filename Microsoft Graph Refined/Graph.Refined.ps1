@@ -2,11 +2,12 @@ function Refine {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
-        [object]
+        [system.array]
         $InputObject,
 
         [switch] $limit
     )
+    $InputObject
 
     foreach ($object in $InputObject) {
         if ($object -is [string] -or $object.GetType().IsPrimitive) {
@@ -26,5 +27,8 @@ function Refine {
             }
         }
         [PSCustomObject]$NewObj
-    } 
+    }
 }
+
+get-mgUser | refine
+
