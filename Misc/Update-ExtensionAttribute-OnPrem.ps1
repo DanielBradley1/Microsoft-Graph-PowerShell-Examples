@@ -3,7 +3,7 @@
 Connect-MgGraph -certicate.....
 
 #Get all users
-$AllUsers = Get-MgUser -All -Property SignInActivity
+$AllUsers = Get-MgBetaUser -All -Property SignInActivity
 
 Foreach ($mguser in $allusers){
     #Checking if Sign in activity is null
