@@ -1,0 +1,6 @@
+while (($policynextlink -ne "") -and ($null -ne $policynextlink))
+{
+    $nextsettings = (Invoke-MgGraphRequest -Uri $policynextlink -Method GET -OutputType PSObject)
+    $policynextlink = ($nextsettings."@odata.nextLink")
+    $eventsvalues += $nextsettings.value
+}
